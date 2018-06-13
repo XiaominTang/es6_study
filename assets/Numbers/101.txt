@@ -1,0 +1,55 @@
+1.二进制数字前面加上 0b 表示；八进制数字前面加上 0o 表示
+2.Number.isFinite() 判断参数是否为数字且为 有限的，返回布尔值；Number.isNaN() 返回布尔值
+3.Number.parseInt(), Number.parseFloat()由全局方法移植到Number对象上（目的：逐步减少全局性方法，使得语言逐步模块化）
+4.Number.isInteger() 判断对象是否为数值且为整数
+  注:25和25.0同为整数，25.1就是浮点数；数值精度太高时可能因为小数点后n位被丢弃而造成误判，如果对数值精度要求较高时，不建议用isInteger()来判断整数
+5.Number.EPSILON 常量，定义浮点数能够表示的最小精度；因此，Number.EPSILON的实质是一个可以接受的最小误差范围。
+
+//误差检查函数
+function withinErrorMargin (left, right) {
+  return Math.abs(left - right) < Number.EPSILON * Math.pow(2, 2);
+}
+
+0.1 + 0.2 === 0.3 // false
+withinErrorMargin(0.1 + 0.2, 0.3) // true
+
+1.1 + 1.3 === 2.4 // false
+withinErrorMargin(1.1 + 1.3, 2.4) // true
+
+6.安全整数:JS能表示的最大的整数
+    Number.isSafeInteger()
+
+    function trusty (left, right, result) {
+  if (
+    Number.isSafeInteger(left) &&
+    Number.isSafeInteger(right) &&
+    Number.isSafeInteger(result)
+  ) {
+    return result;
+  }
+  throw new RangeError('Operation cannot be trusted!');
+}
+
+trusty(9007199254740993, 990, 9007199254740993 - 990)
+// RangeError: Operation cannot be trusted!
+
+trusty(1, 2, 3)
+
+7.Math 对象的扩展
+① Math.trunc() 截取整数部分
+② Math.sign（）“符号”用来判断一个数值为正为负还是0
+    正数返回+1；负数返回-1；+0返回0；-0返回-0；非数值返回NaN
+③Math.cbrt() 返回一个数值的立方根 cubic root
+④Math.clz32() 方法返回一个数的 32 位无符号整数形式有多少个前导 (count leading zeros )
+⑤Math.imul() 返回两个数以 32 位带符号整数形式相乘的结果，返回的也是一个 32 位的带符号整数
+⑥Math.fround()  返回一个数的32位单精度浮点数形式。
+⑦Math.hypot() 方法返回所有参数的平方和的平方根(勾股定理进化版，多个参数也可用)
+对数方法：
+①Math.expm1(x)返回 ex - 1
+②Math.log1p(x)方法返回1 + x的自然对数，即Math.log(1 + x)。如果x小于-1，返回NaN。
+③Math.log10(x)返回以 10 为底的x的对数
+④Math.log2(x)返回以 2 为底的x的对数。如果x小于 0，则返回 NaN。
+
+8.ES2016 新增了一个指数运算符（**）。即^
+2 ** 2 // 4
+2 ** 3 // 8
